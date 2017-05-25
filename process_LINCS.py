@@ -9,7 +9,7 @@ os.chdir('/exeh/exe3/zhaok/data')
 # extract all samples that were treated with vorinostat
 sig_info = pd.read_csv("GSE92742_Broad_LINCS_sig_info.txt", sep="\t")
 
-# unique the pert name set
+# unique the pert name
 pert_set = set(sig_info["pert_iname"])
 
 # read N05A data file
