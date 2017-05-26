@@ -30,7 +30,7 @@ search_res = filter(lambda x: bool(re.search(se_pattern, x)), pert_set)
 idx = np.repeat(False, sig_info.shape[0])
 
 for s in search_res:
-    print(sum(sig_info["pert_iname"] == s))
+    # print(sum(sig_info["pert_iname"] == s))
     idx[sig_info["pert_iname"] == s] = True
 
 # generate positive observations    
