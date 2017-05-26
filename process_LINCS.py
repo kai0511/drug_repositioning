@@ -30,7 +30,7 @@ if __name__ == '__main__':
     idx = np.repeat(False, sig_info.shape[0])
 
     for s in search_res:
-        # print(sum(sig_info["pert_iname"] == s))
+        print(sum(sig_info["pert_iname"] == s))
         idx[sig_info["pert_iname"] == s] = True
 
     # generate positive observations    
@@ -41,16 +41,25 @@ if __name__ == '__main__':
 
     # parse gene expression data using pos_sig_id obtained in the above step 
     positive_gctx = parse('GSE92742_Broad_LINCS_Level5_COMPZ.MODZ_n473647x12328.gctx', cid=pos_sig_id)
-
-    # (positive_gctx.data_df.T).to_csv('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.csv')
-
+    
+    # add the indication column
+    positive_df = positive_gctx.data_df.T
+    positive_df = positive_df.assign(indication = pd.Series(np.repeat(1, len(pos_sig_id))).values)
+    
     # generate negative observations    
     neg_sig_id = sig_info["sig_id"][~idx]
 
     negative_gctx = parse('GSE92742_Broad_LINCS_Level5_COMPZ.MODZ_n473647x12328.gctx', cid=neg_sig_id)
-
+    negative_df = negative_gctx.data_df.T
+    negative_df = negative_df.assign(indication = pd.Series(np.repeat(0, negative_df.shape[0])).values)
+    
     # append positive gctx to negative gctx
-    gene_expr = (negative_gctx.data_df.T).append(positive_gctx.data_df.T)
-
+    gene_expr = (negative_df).append(negative_df)
+    
+    # change the order of columns
+    cols = gene_expr.columns.tolist()
+    cols = cols[-1:] + cols[:-1]
+    gene_expr = gene_expr[cols]
+    
     # write them to a csv file
     gene_expr.to_csv('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.csv')
