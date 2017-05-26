@@ -61,5 +61,10 @@ if __name__ == '__main__':
     cols = cols[-1:] + cols[:-1]
     gene_expr = gene_expr[cols]
     
-    # write them to a csv file
-    gene_expr.to_csv('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.csv')
+    # store dataframe into a file
+    # gene_expr.to_pickle('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.csv')  # somewhat faster method than to_csv()
+    
+    # probably a more advanced method to store dataset
+    store = pd.HDFStore('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.h5')
+    store['gene_expr'] = gene_expr  # save it
+    store.close()
