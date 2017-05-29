@@ -41,30 +41,30 @@ if __name__ == '__main__':
 
     # parse gene expression data using pos_sig_id obtained in the above step 
     positive_gctx = parse('GSE92742_Broad_LINCS_Level5_COMPZ.MODZ_n473647x12328.gctx', cid=pos_sig_id)
-    
+
     # add the indication column
     positive_df = positive_gctx.data_df.T
     positive_df = positive_df.assign(indication = pd.Series(np.repeat(1, len(pos_sig_id))).values)
-    
+
     # generate negative observations    
     neg_sig_id = sig_info["sig_id"][~idx]
 
     negative_gctx = parse('GSE92742_Broad_LINCS_Level5_COMPZ.MODZ_n473647x12328.gctx', cid=neg_sig_id)
     negative_df = negative_gctx.data_df.T
     negative_df = negative_df.assign(indication = pd.Series(np.repeat(0, negative_df.shape[0])).values)
-    
+
     # append positive gctx to negative gctx
-    gene_expr = (negative_df).append(negative_df)
-    
+    gene_expr = (negative_df).append(positive_df)
+
     # change the order of columns
     cols = gene_expr.columns.tolist()
     cols = cols[-1:] + cols[:-1]
     gene_expr = gene_expr[cols]
-    
+
     # store dataframe into a file
-    # gene_expr.to_pickle('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.csv')  # somewhat faster method than to_csv()
-    
+    # gene_expr.to_pickle('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.pk')  # somewhat faster method than to_csv()
+
     # probably a more advanced method to store dataset
-    store = pd.HDFStore('GSE92742_Broad_LINCS_Level5_COMPZ_N05A.h5')
+    store = pd.HDFStore('GSE92742_Broad_LINCS_Level5_COMPZ.N05A_n473647x12328.h5')
     store['gene_expr'] = gene_expr  # save it
     store.close()
