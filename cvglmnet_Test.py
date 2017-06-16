@@ -53,6 +53,7 @@ def main(toPrint=True):
     xOrig = pheno.iloc[:, 1:].values
     xOrig = xOrig.astype(np.float64)
     yOrig = pheno.iloc[:, 0].values
+    yOrig = yOrig.astype(np.float64)
     
     drugName = np.asarray(pheno.index, dtype=str)    
     xOrig, yOrig, drugName = shuffle(xOrig, yOrig, drugName, random_state = 0)
