@@ -51,6 +51,7 @@ def main(toPrint=True):
     nfold = 3
     pheno = load_hdf(loc, df_name)
     xOrig = pheno.iloc[:, 1:].values
+    xOrig = xOrig.astype(np.float64)
     yOrig = pheno.iloc[:, 0].values
     
     drugName = np.asarray(pheno.index, dtype=str)    
