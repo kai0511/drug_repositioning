@@ -10,6 +10,7 @@ from cvglmnetCoef import cvglmnetCoef
 from cvglmnetPlot import cvglmnetPlot
 from cvglmnetPredict import cvglmnetPredict
 from sklearn.metrics import log_loss
+from sklearn.utils import shuffle
 from sklearn.model_selection import StratifiedKFold
 
 def load_hdf(loc, df_name):
@@ -52,7 +53,7 @@ def main(toPrint=True):
     xOrig = pheno.iloc[:, 1:].values
     yOrig = pheno.iloc[:, 0].values
     
-    drugName = np.asarray(pheno.index, dtype='string')    
+    drugName = np.asarray(pheno.index, dtype=str)    
     xOrig, yOrig, drugName = shuffle(xOrig, yOrig, drugName, random_state = 0)
     fid = generateFoldid(xOrig, yOrig, nfold)
     
