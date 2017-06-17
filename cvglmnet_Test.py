@@ -57,6 +57,7 @@ def main(toPrint=True):
     
     drugName = np.asarray(pheno.index, dtype=str)    
     xOrig, yOrig, drugName = shuffle(xOrig, yOrig, drugName, random_state = 0)
+    yOrig = yOrig.reshape(yOrig.shape[0],1)
     fid = generateFoldid(xOrig, yOrig, nfold)
     
     optimalAlpha = 0
