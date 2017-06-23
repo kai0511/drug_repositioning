@@ -1,4 +1,3 @@
-
 setwd('/exeh/exe3/zhaok/data/genePerturbation')
 
 # read cmap gene expression data
@@ -10,12 +9,14 @@ drugExprGeneID = names(cmap)
 knockDown <- read.table('/exeh/exe3/sohc/L1000/consensi-knockdown.tsv', header=TRUE)
 knockDownGeneID <- colnames(knockDown)
 knockDownGeneID <- unname(sapply(knockDownGeneID, function(x) substring(x, 2)))
+knockDownGeneID[1] = 'perturbagen'
 colnames(knockDown) <- knockDownGeneID
 
 # read overexpression gene expression data
 overExpression <- read.table('/exeh/exe3/sohc/L1000/consensi-overexpression.tsv', header=TRUE)
 overExpressionID <- colnames(overExpression)
 overExpressionID <- unname(sapply(overExpressionID, function(x) substring(x, 2)))
+overExpressionID[1] = 'perturbagen'
 colnames(overExpression) <- overExpressionID
 
 # find the intersection between cmap gene set and knockdown gene set
@@ -23,9 +24,9 @@ intersectGeneID <- intersect(drugExprGeneID, knockDownGeneID)
 intersectGeneID1 <- intersect(drugExprGeneID, overExpressionID)
 
 # confirm whether gene set is consensus between the two perturbations 
-intersectGeneID == length(intersect(intersectGeneID1, intersectGeneID))
+length(intersectGeneID) == length(intersect(intersectGeneID1, intersectGeneID))
 
 # save
-write.table(overExpression[, intersectGeneID], 'L1000_consensi_overExpression.csv')
-write.table(cmap[, intersectGeneID], 'cmap_differential_expression_knockdown.csv')
-write.table(knockDown[, intersectGeneID], 'L1000_consensi_knockdown.csv')
+write.table(overExpression[, c('perturbagen', intersectGeneID)], 'L1000_consensi_overExpression.csv')
+write.table(cmap[, intersectGeneID], 'cmap_differential_expression_perturbation.csv')
+write.table(knockDown[, c('perturbagen', intersectGeneID)], 'L1000_consensi_knockdown.csv')
