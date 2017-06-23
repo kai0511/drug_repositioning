@@ -25,8 +25,6 @@ alpha.vec = seq(0,1,0.1)
 setwd('/exeh/exe3/zhaok/data/genePerturbation')
 cmap <- read.table('cmap_differential_expression_perturbation.csv', header=TRUE)
 ATC.N05A <- read.csv('/exeh/exe3/zhaok/data/N05A.txt', header=FALSE)
-knock.down <- read.table('L1000_consensi_knockdown.csv', header=TRUE)
-over.expression <- read.table('L1000_consensi_overExpression.csv', header=TRUE)
 
 # obtain indications for N05A drugs
 search.term <- paste(tolower(as.vector(ATC.N05A[[1]])), collapse = '|')
@@ -51,7 +49,7 @@ X <- as.matrix(indicated.cmap[, -1])
 y <- indicated.cmap$Indication
 
 # run cv.glmnet
-var.list <- lapply(alpha.vec, optimal.var, train_X = X, train_y = y, n_fold = 3)
+var.list <- lapply(alpha.vec, optimal.var, train_X = X, train_y = y, n_fold = nfold)
 min.pos <- which.min(unlist(lapply(var.list, function(e) e$deviance)))
 
 # print best parameters from training
@@ -71,8 +69,8 @@ for(i in seq(1, max(folds))){
 # make predictions on knockdown and overexpression data
 knockdown <- read.table('L1000_consensi_knockdown.csv', header=TRUE)
 overexpression <- read.table('L1000_consensi_knockdown.csv', header=TRUE)
-predicted.knockdown <- predict(cv.glmnet.fit, knockdown[,-1], s="lambda.min", type='response')
-predicted.overexpression <- predict(cv.glmnet.fit, overexpression[,-1], s="lambda.min", type='response')
+predicted.knockdown <- predict(cv.glmnet.fit, as.matrix(knockdown[,-1]), s="lambda.min", type='response')
+predicted.overexpression <- predict(cv.glmnet.fit, as.matrix(overexpression[,-1]), s="lambda.min", type='response')
 
 # save results
 knockdown.res <- data.frame(perturbationID = knockdown[, 1], pred = predicted.knockdown)
