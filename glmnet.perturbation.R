@@ -1,8 +1,7 @@
-library(caret)
-library(doMC)
+# library(doMC)
 library(Metrics)
 library(glmnet)
-registerDoMC(cores = 4)
+# registerDoMC(cores = 4)
 
 # format results from Elastic Net with given alpha
 optimal.var <- function(alpha, train_X, train_y, n_fold){
@@ -38,7 +37,7 @@ cmap$Indication <- Indication
 
 # adjust the order of columns
 col.name <- names(cmap)
-new.order <- c('Indication', col.name[1:length(col.name) - 1])
+new.order <- c('Indication', col.name[1:length(col.name)-1])
 indicated.cmap <- cmap[, new.order]
 
 # generate foldid for cv.glmnent function
@@ -63,7 +62,7 @@ folds <- cv.glmnet.fit$foldid
 for(i in seq(1, max(folds))){
     y.pred <- fited.y[folds == i]
     y.real <- y[folds == i]
-    print('log Loss for fold ', i, ' :', paste0(logLoss(y.real, y.pred)), '.', quote = FALSE)
+    print(paste0('log Loss for fold ', i, ' :', logLoss(y.real, y.pred), '.'), quote = FALSE)
 }
 
 # make predictions on knockdown and overexpression data
@@ -73,7 +72,7 @@ predicted.knockdown <- predict(cv.glmnet.fit, as.matrix(knockdown[,-1]), s="lamb
 predicted.overexpression <- predict(cv.glmnet.fit, as.matrix(overexpression[,-1]), s="lambda.min", type='response')
 
 # save results
-knockdown.res <- data.frame(perturbationID = knockdown[, 1], pred = predicted.knockdown)
-overexpression.res <- data.frame(perturbationID = overexpression[, 1], pred = predicted.overexpression)
+knockdown.res <- data.frame(perturbationID = knockdown[, 1], pred = predicted.knockdown[,1])
+overexpression.res <- data.frame(perturbationID = overexpression[, 1], pred = predicted.overexpression[,1])
 write.table(knockdown.res, 'knockdown_res.csv', append=TRUE , quote=FALSE, sep=',', row.names=FALSE, col.names = FALSE)
 write.table(overexpression.res, 'overexpression_res.csv', append=TRUE , quote=FALSE, sep=',', row.names=FALSE, col.names = FALSE)
