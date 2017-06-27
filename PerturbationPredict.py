@@ -70,7 +70,7 @@ def main():
                       'pert_id':'consensi-pert_id.tsv'}
     
     # make predictions on knockdonw, overexpression and all pert datasets
-    for pertType in predictionDataDict.keys():
+    for pertType in predictionData.keys():
         pert = pd.read_table(predictionData[pertType], header=0)
         pertRes = SVMObj.predict_proba(pert.iloc[:, 1:].values)
         resDict = {"predRes":pd.Series(pertRes), 'pertId': pert.loc[:, 'perturbagen']}
