@@ -76,3 +76,6 @@ def main():
         resDict = {"predRes":pd.Series(pertRes), 'pertId': pert.loc[:, 'perturbagen']}
         resDataFrame = pd.DataFrame(resDict)
         resDataFrame.to_csv('SVM-'+pertType+'Res.csv')
+
+if __name__ == '__main__':
+    main()
