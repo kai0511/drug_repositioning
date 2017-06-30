@@ -180,7 +180,7 @@ class DeepNeuronNetwork(object):
             modelRes = [res['model'] for res in trials.results if res['status'] == 'ok']
             minPos = np.argmin(lossRes)
             self.minLosses.append(lossRes[minPos])
-            self.optimalModel.append(modelRes[minPos])
+            self.models.append(modelRes[minPos])
                         
             print('Best parameters estimates: \n%s\n' % optimalParam) 
             print('Corresponding loss using the best combination of parameters: \n%s\n' % lossRes[minPos])
@@ -188,7 +188,7 @@ class DeepNeuronNetwork(object):
         idx = np.argmin(self.minLosses)
         print('The index for choosing the best parameter: %s' % idx) 
         print('The min loss list for cross validation: \n%s\n' % lossRes)
-        self.model = self.optimalModel[idx]
+        self.model = self.models[idx]
         print('The json formate best parameters: \n%s\n' % self.model.to_json())
 
 def getSearchPattern(loc, name):
