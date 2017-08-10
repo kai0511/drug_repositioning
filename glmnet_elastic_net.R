@@ -43,8 +43,7 @@ for(d in dir_vec){
     for(n in seq(3)){
         file_train = paste0(d,'/Cmap_differential_expression_', d, '_train_part', n, '.csv')
         file_test = paste0(d,'/Cmap_differential_expression_', d, '_test_part', n,'.csv')
-        
-        
+
         pheno_train <- read.csv(file_train,header=F)
         pheno_test <- read.csv(file_test,header=F)
         
